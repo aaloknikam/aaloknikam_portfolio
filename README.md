@@ -41,4 +41,10 @@ This section keeps the record of what things have been sold at what time and wha
 ![image](https://github.com/user-attachments/assets/d944830d-f2aa-4a94-8104-a3bf49d21937)
 
 
+<br>
+<br>
+<br>
+-----the project is still in progress-----
+
+
 
