@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | RECORDS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <h1 class="brand">RECORDS</h1>
+            <nav class="navbar-container">
+                <ul>
+                    <li><a class="nav-item active" href="dashboard.html">Dashboard</a></li>
+                    <li><a class="nav-item" href="menu.html">Menu</a></li>
+                    <li><a class="nav-item" href="orders.html">Orders</a></li>
+                    <li><a class="nav-item" href="history.html">History</a></li>
+                    <li><a class="nav-item" href="feedback.html">Feedback</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="profile.jpg" alt="User Profile" class="profile-img">
+                <p class="user-name">Aalok Nikam</p>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard">
+            <header>
+                <h2>Welcome, aalok!</h2>
+                <div id="liveClock" class="live-clock"></div>
+            </header>
+            <p>Here is an overview of your restaurant’s performance.</p>
+            <section class="statistics">
+                <div class="stat-card">
+                    <h3>Today’s Popular Orders</h3>
+                    <ul>
+                        <li>Burger - 25 orders</li>
+                        <li>Pizza - 20 orders</li>
+                    </ul>
+                </div>
+                <div class="stat-card">
+                    <h3>Best Sellers (All Time)</h3>
+                    <ul>
+                        <li>Pizza - 500 orders</li>
+                        <li>Pasta - 450 orders</li>
+                    </ul>
+                </div>
+                <!-- <div class="chart">
+                    <canvas id="salesChart"></canvas>
+                </div> -->
+            </section>
+        </main>
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | RECORDS</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <h1 class="brand">RECORDS</h1>
+            <nav class="navbar-container">
+                <ul>
+                    <li><a class="nav-item" href="dashboard.html">Dashboard</a></li>
+                    <li><a class="nav-item" href="menu.html">Menu</a></li>
+                    <li><a class="nav-item active" href="orders.html">Orders</a></li>
+                    <li><a class="nav-item" href="history.html">History</a></li>
+                    <li><a class="nav-item" href="feedback.html">Feedback</a></li>
+                </ul>
+            </nav>
+            <div class="user-profile">
+                <img src="profile.jpg" alt="User Profile" class="profile-img">
+                <p class="user-name">John Doe</p>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header>
+                <h2>Current Orders</h2>
+                <button id="addTable">Add New Table</button>
+                <input type="search" placeholder="Search orders..." id="orderSearch">
+                <p id="ordersDoneDisplay">Orders Done: 0</p>
+            </header>
+            <section class="order-tables" id="orderTables">
+                <!-- Initially empty -->
+            </section>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderTables = document.getElementById('orderTables');
+            const addTableButton = document.getElementById('addTable');
+            const searchInput = document.getElementById('orderSearch');
+            let customerCount = 1;
+            let ordersDone = 0;
+
+            const ordersDoneDisplay = document.getElementById('ordersDoneDisplay');
+            ordersDoneDisplay.textContent = `Orders Done: ${ordersDone}`;
+
+            addTableButton.addEventListener('click', () => {
+                const tableNumber = orderTables.children.length + 1;
+                const newTable = document.createElement('div');
+                newTable.className = 'order-card';
+                newTable.innerHTML = `
+                    <h3>Table ${tableNumber}</h3>
+                    <p>Customer: Customer${customerCount++} <span class="edit-btn" data-target="customer">✎</span></p>
+                    <ul>
+                        <li>Item - $0.00</li>
+                    </ul>
+                    <p>Total: $0.00</p>
+                    <div class="table-actions">
+                        <button class="edit-order">Edit Orders</button>
+                        <button class="mark-paid">Mark Paid</button>
+                        <span class="delete-table cross">✖</span>
+                        <button class="reset-table" style="display: none;">Reset</button>
+                    </div>
+                `;
+                orderTables.appendChild(newTable);
+                attachTableActions(newTable);
+            });
+
+            function attachTableActions(tableCard) {
+    const markPaidButton = tableCard.querySelector('.mark-paid');
+    const resetButton = tableCard.querySelector('.reset-table');
+    const editOrderButton = tableCard.querySelector('.edit-order');
+    const deleteTableButton = tableCard.querySelector('.delete-table');
+    const editCustomerBtn = tableCard.querySelector('[data-target="customer"]');
+
+    // Mark Paid functionality
+    markPaidButton.addEventListener('click', () => {
+        markPaidButton.textContent = 'Paid';
+        markPaidButton.disabled = true;
+        markPaidButton.style.backgroundColor = '#6c757d'; // Disabled color
+        resetButton.style.display = 'inline-block'; // Show the reset button
+
+        // Disable and hide the edit order button
+        editOrderButton.disabled = true;
+        editOrderButton.style.display = 'none';
+
+        // Increment the orders done counter
+        ordersDone++;
+        ordersDoneDisplay.textContent = `Orders Done: ${ordersDone}`;
+    });
+
+    // Reset functionality
+    resetButton.addEventListener('click', () => {
+        // Reset the table to its default values
+        tableCard.querySelector('p').textContent = `Customer: Customer${customerCount++}`;
+        const itemList = tableCard.querySelector('ul');
+        itemList.innerHTML = '<li>Item - $0.00</li>'; // Reset items list
+        tableCard.querySelector('p:nth-of-type(2)').textContent = 'Total: $0.00'; // Reset total
+        markPaidButton.textContent = 'Mark Paid';
+        markPaidButton.disabled = false;
+        markPaidButton.style.backgroundColor = '#28a745'; // Default color
+        resetButton.style.display = 'none'; // Hide reset button
+
+        // Enable and show the edit order button
+        editOrderButton.disabled = false;
+        editOrderButton.style.display = 'inline-block';
+    });
+
+    // Edit Orders functionality
+    editOrderButton.addEventListener('click', () => {
+        const items = prompt(
+            'Enter items (format: Item1 - $Price1, Item2 - $Price2):',
+            'Item - $0.00'
+        );
+
+        if (items) {
+            const itemList = tableCard.querySelector('ul');
+            itemList.innerHTML = ''; // Clear existing items
+            let total = 0;
+            items.split(',').forEach(item => {
+                const [itemName, itemPrice] = item.split('-');
+                const price = parseFloat(itemPrice.trim().replace('$', ''));
+                total += price;
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `${itemName.trim()} - $${price.toFixed(2)}`;
+                itemList.appendChild(listItem);
+            });
+
+            tableCard.querySelector('p:nth-of-type(2)').textContent = `Total: $${total.toFixed(2)}`;
+        }
+    });
+
+    // Delete Table functionality
+    deleteTableButton.addEventListener('click', () => {
+        const confirmDelete = confirm('Are you sure you want to delete this table?');
+        if (confirmDelete) {
+            tableCard.remove();
+            if (orderTables.children.length === 0) {
+                customerCount = 1;
+            }
+        }
+    });
+
+    // Edit Customer functionality
+    editCustomerBtn.addEventListener('click', () => {
+        const customerName = prompt('Enter Customer Name:', tableCard.querySelector('p').textContent.split(':')[1].trim());
+        if (customerName) {
+            tableCard.querySelector('p').textContent = `Customer: ${customerName}`;
+        }
+    });
+}
+
+
+            searchInput.addEventListener('input', () => {
+                const query = searchInput.value.toLowerCase();
+                document.querySelectorAll('.order-card').forEach(card => {
+                    const tableName = card.querySelector('h3').textContent.toLowerCase();
+                    const customerName = card.querySelector('p').textContent.toLowerCase();
+
+                    if (tableName.includes(query) || customerName.includes(query)) {
+                        card.style.display = '';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+
+
+
+    </script>
+</body>
+</html>
